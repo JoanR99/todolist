@@ -11,6 +11,7 @@ class Todolist extends React.Component {
 		};
 		this.onInputChange = this.onInputChange.bind(this);
 		this.onItemSubmit = this.onItemSubmit.bind(this);
+		this.onItemDelete = this.onItemDelete.bind(this);
 	}
 
 	onInputChange(event) {
@@ -22,9 +23,8 @@ class Todolist extends React.Component {
 
 		fetch('http://localhost:3000/add', {
 			method: 'post',
-			mode: 'no-cors',
-			headers: { 'content-type': 'application/x-www-form-urlencoded' },
-			body: `item=${this.state.input}`,
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify({ item: this.state.input }),
 		})
 			.catch((err) => console.log(err))
 			.then(() => {
@@ -41,6 +41,25 @@ class Todolist extends React.Component {
 		event.preventDefault();
 	}
 
+	onItemDelete(id) {
+		console.log(id);
+
+		fetch('http://localhost:3000/delete', {
+			method: 'post',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify({ id }),
+		})
+			.catch((err) => console.log(err))
+			.then(() => {
+				fetch('http://localhost:3000/get')
+					.then((response) => response.json())
+					.then((data) => {
+						this.setState({ items: data });
+					})
+					.catch((err) => console.log('Error getting data: ' + err));
+			});
+	}
+
 	componentDidMount() {
 		fetch('http://localhost:3000/get')
 			.then((response) => response.json())
@@ -54,7 +73,10 @@ class Todolist extends React.Component {
 	render() {
 		return (
 			<div className="box">
-				<TodolistItems items={this.state.items} />
+				<TodolistItems
+					items={this.state.items}
+					onItemDelete={this.onItemDelete}
+				/>
 				<Form
 					onInputChange={this.onInputChange}
 					onItemSubmit={this.onItemSubmit}
