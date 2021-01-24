@@ -18,13 +18,37 @@ class Todolist extends React.Component {
 	}
 
 	onItemSubmit(event) {
+		console.log(this.state.input);
+
+		fetch('http://localhost:3000/add', {
+			method: 'post',
+			mode: 'no-cors',
+			headers: { 'content-type': 'application/x-www-form-urlencoded' },
+			body: `item=${this.state.input}`,
+		})
+			.catch((err) => console.log(err))
+			.then(() => {
+				fetch('http://localhost:3000/get')
+					.then((response) => response.json())
+					.then((data) => {
+						console.log(data);
+						this.setState({ items: data });
+					})
+					.catch((err) => console.log('Error getting data: ' + err));
+				this.setState({ input: '' });
+			});
+
 		event.preventDefault();
-		const todoItems = this.state.items;
-		todoItems.push(this.state.input);
-		this.setState({ items: todoItems });
-		this.setState({ input: '' });
-		console.log(this.state);
-		event.preventDefault();
+	}
+
+	componentDidMount() {
+		fetch('http://localhost:3000/get')
+			.then((response) => response.json())
+			.then((data) => {
+				console.log(data);
+				this.setState({ items: data });
+			})
+			.catch((err) => console.log('Error getting data: ' + err));
 	}
 
 	render() {

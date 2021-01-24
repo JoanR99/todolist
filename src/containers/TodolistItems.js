@@ -4,8 +4,8 @@ import Item from '../components/Item';
 const TodolistItems = ({ items }) => {
 	console.log(items);
 	if (items.length !== 0) {
-		let todoItems = items.map((item, index) => (
-			<Item item={item} key={index} />
+		let todoItems = items.map((item) => (
+			<Item item={item.name} key={item.id} />
 		));
 		return todoItems;
 	} else {
