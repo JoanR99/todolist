@@ -21,14 +21,14 @@ class Todolist extends React.Component {
 	onItemSubmit(event) {
 		console.log(this.state.input);
 
-		fetch('http://localhost:3000/add', {
+		fetch('https://fierce-mountain-19943.herokuapp.com/add', {
 			method: 'post',
 			headers: { 'content-type': 'application/json' },
 			body: JSON.stringify({ item: this.state.input }),
 		})
 			.catch((err) => console.log(err))
 			.then(() => {
-				fetch('http://localhost:3000/get')
+				fetch('https://fierce-mountain-19943.herokuapp.com/get')
 					.then((response) => response.json())
 					.then((data) => {
 						console.log(data);
@@ -44,14 +44,14 @@ class Todolist extends React.Component {
 	onItemDelete(id) {
 		console.log(id);
 
-		fetch('http://localhost:3000/delete', {
+		fetch('https://fierce-mountain-19943.herokuapp.com/delete', {
 			method: 'post',
 			headers: { 'content-type': 'application/json' },
 			body: JSON.stringify({ id }),
 		})
 			.catch((err) => console.log(err))
 			.then(() => {
-				fetch('http://localhost:3000/get')
+				fetch('https://fierce-mountain-19943.herokuapp.com/get')
 					.then((response) => response.json())
 					.then((data) => {
 						this.setState({ items: data });
@@ -61,7 +61,7 @@ class Todolist extends React.Component {
 	}
 
 	componentDidMount() {
-		fetch('http://localhost:3000/get')
+		fetch('https://fierce-mountain-19943.herokuapp.com/get')
 			.then((response) => response.json())
 			.then((data) => {
 				console.log(data);
